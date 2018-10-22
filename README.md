@@ -21,6 +21,7 @@ This will create a bin_file.h with the correct formatting to be used in the Ardu
 `#include "bin_file.h"`
 
 Next, in the Arduino sketch uncomment the line to choose the mode:
+
 `//#define READCOMPARE
 //#define BLANK
 //#define WRITE
@@ -28,6 +29,7 @@ Next, in the Arduino sketch uncomment the line to choose the mode:
 `
 
 And select the bank address you want to read/write
+
 `#define Start_Address 0x0000        //0x0000, 0x2000, 0x4000, 0x6000, 0x8000, 0xa000, 0xc000, 0xe000`
 
 
