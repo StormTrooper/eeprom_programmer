@@ -22,11 +22,14 @@ This will create a bin_file.h with the correct formatting to be used in the Ardu
 
 Next, in the Arduino sketch uncomment the line to choose the mode:
 
-`//#define READCOMPARE
-//#define BLANK
-//#define WRITE
-//#define ERASE
-`
+`//#define READCOMPARE`
+
+`//#define BLANK`
+
+`//#define WRITE`
+
+`//#define ERASE`
+
 
 And select the bank address you want to read/write
 
