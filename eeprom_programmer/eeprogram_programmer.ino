@@ -1,11 +1,11 @@
 /*
- * EEPROM Programmer
- * 
- * It is made to Read/Write Data from EEPROM directly with the Arduino
- * This program is made to read Winbond W27c256
- * 
- * For more information see https://blog.gjmccarthy.co.uk
- * 
+   EEPROM Programmer
+
+   It is made to Read/Write Data from EEPROM directly with the Arduino
+   This program is made to read Winbond W27c256
+
+   For more information see https://blog.gjmccarthy.co.uk
+
 */
 
 
@@ -17,9 +17,10 @@
 //####################################################################################################################################
 // Select mode
 //####################################################################################################################################
-//#define READCOMPARE
-//#define BLANK
-#define WRITE
+//#define VERIFY
+#define READ
+//#define CHECKBLANK
+//#define WRITE
 //#define ERASE
 
 
@@ -108,8 +109,13 @@ void setup() {
 
 void loop() {
 
-#ifdef READCOMPARE
-  Serial.println("Reading and comparing EEPROM");
+#ifdef VERIFY
+  Serial.println("Verifying EEPROM against bin_file");
+  Verify();
+#endif
+
+#ifdef READ
+  Serial.println("Read EEPROM");
   Read();
 #endif
 
@@ -124,7 +130,7 @@ void loop() {
   Erase();
 #endif
 
-#ifdef BLANK
+#ifdef CHECKBLANK
   Serial.println("Blank check 64k x 8 EEPROM");
   BlankCheck();
 #endif
@@ -138,8 +144,49 @@ void loop() {
 //###############################################################
 // Functions
 //###############################################################
+//Almost the same as Verify
 
 void Read() {
+  long addr = Start_Address;
+  Last_Address = addr;
+
+  for (int y = 0; y < 32; y++) {                 // Loop 8192/256 = 32  times to read 8K of memory
+
+
+    Serial.println("");
+
+    read_start();
+    for (int x = 0; x < BUFFERSIZE; ++x) {        //Loop and read first 256 bytes
+      buffer[x] = read_byte(addr + 256 * y + x);
+      delayMicroseconds(100);
+    }
+    read_end();
+    int count = 0;
+    printHex((addr + 256 * y), 4);
+    Serial.print(": ");
+
+    for (long x = 0; x < BUFFERSIZE; x++) {
+      count++;
+      Serial.print(" ");
+
+      printHex(buffer[x], 2);
+      if ((count > 15) and (x < BUFFERSIZE - 1)) {
+        count = 0;
+        Serial.println("");
+        printHex((addr + 256 * y + x), 4);
+        Serial.print(": ");
+      }
+    }
+  }
+
+  Serial.println("");
+  Serial.println("");
+  Serial.println("Read Completed");
+}
+
+//###############################################################
+
+void Verify() {
   long addr = Start_Address;
   Last_Address = addr;
 
@@ -155,9 +202,6 @@ void Read() {
       delayMicroseconds(100);
     }
     read_end();
-
-    //return Array+Checksum to say it passed
-    //ChecksumThis();
 
 #ifdef DEBUG
     int count = 0;
@@ -201,6 +245,7 @@ void Read() {
   }
 
   Serial.println("");
+  Serial.println("");
   Serial.println("Compare OK");
 }
 
@@ -225,19 +270,25 @@ void BlankCheck() {
     //ChecksumThis();
     for (long x = 0; x < 0xff; x++) {
 
-      if (buffer[x] !=  "0xFF") {
+      //Serial.println(buffer[x]);
+      if (buffer[x] !=  0x09) {
         Serial.println("");
         Serial.println("EEPROM  is not blank");
 
         Serial.println("");
         Serial.print("Found 0x");
         printHex(buffer[x], 2);
-        Serial.print(" at position ");
-        Serial.print(x, HEX);
-        break;
+        Serial.print(" at position 0x");
+        printHex((addr + 256 * y + x), 4);
+        while (1) {
+
+        }
       }
     }
   }
+  Serial.println("");
+  Serial.println("");
+  Serial.println("EEPROM  is blank");
 }
 
 //###############################################################
@@ -281,6 +332,7 @@ void Write() {
 
     write_end();
   }
+  Serial.println("");
   Serial.println("");
   Serial.println("Write complete. Check with Read/Compare");
 }
