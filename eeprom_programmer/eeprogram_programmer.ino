@@ -18,8 +18,8 @@
 // Select mode
 //####################################################################################################################################
 //#define VERIFY
-#define READ
-//#define CHECKBLANK
+//#define READ
+#define CHECKBLANK
 //#define WRITE
 //#define ERASE
 
@@ -271,7 +271,7 @@ void BlankCheck() {
     for (long x = 0; x < 0xff; x++) {
 
       //Serial.println(buffer[x]);
-      if (buffer[x] !=  0x09) {
+      if (buffer[x] !=  0xff) {
         Serial.println("");
         Serial.println("EEPROM  is not blank");
 
