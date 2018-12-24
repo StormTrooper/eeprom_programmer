@@ -27,7 +27,7 @@ if statinfo.st_size <> 8192:
    exit()
 
 
-file.write("const int bin_file[] PROGMEM = { \\")
+file.write("const byte bin_file[] PROGMEM = { \\")
 file.write("\n")
 bytes = 0
 try:
