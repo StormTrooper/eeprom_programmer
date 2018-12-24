@@ -2,7 +2,7 @@
    EEPROM Programmer
 
    It is made to Read/Write Data from EEPROM directly with the Arduino
-   This program is made to read Winbond W27c256
+   This program is made to read/program Winbond W27c256 and 27C256 chips
 
    For more information see https://blog.gjmccarthy.co.uk
 
