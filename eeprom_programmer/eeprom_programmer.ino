@@ -13,7 +13,6 @@
    27C128 - not tested
    27C512 - not tested
 
-p
    Data write to the EPROM is contained in the bin_file.h which is generated from a convert.py python file
 
    For more information see https://blog.gjmccarthy.co.uk
@@ -22,8 +21,6 @@ p
 
 
 #include "bin_file.h"   //Contents of binary file to be programmed
-
-
 
 //#define DEBUG
 
@@ -35,7 +32,6 @@ unsigned int chipType;
 #define CHIP27SF512   5   //INCLUDED : 27C512, W27E512, W27C512
 #define CHIP28C64     6   //INCLUDED : 27C64
 #define CHIP28C256    7
-
 
 // define the IO lines for the data - bus
 #define D0 2
@@ -115,7 +111,6 @@ void setup() {
   digitalWrite(VPP_27C256, LOW);
   pinMode(VPP_27C256, OUTPUT);
 
-
   //define the EEPROM Pins as output (take care that they are HIGH)
   digitalWrite(OE, HIGH);
   pinMode(OE, OUTPUT);
@@ -135,7 +130,6 @@ void setup() {
 //###############################################################
 
 void loop() {
-
 
   if (Serial.available() > 0) {
     ReadSerial();
@@ -178,10 +172,7 @@ void loop() {
     resetVariables();
   }
 
-
-
 }
-
 
 //###############################################################
 // Functions
@@ -195,7 +186,6 @@ void Read() {
   Serial.println(BlockSize);
 
   for (int y = 0; y < BlockSize / 256; y++) {               // Loop If bin_size is 8k then 8192/256 = 32  times to read 8K of memory
-
 
     Serial.println("");
 
@@ -270,7 +260,6 @@ void Verify() {
 
 #endif
 
-
       if (buffer[x] !=  pgm_read_byte(bin_file + 256 * y + x)) {
         Serial.println("");
         Serial.print("Compare error at 0x");
@@ -343,7 +332,6 @@ void Write() {
   long addr = Start_Address;
   Last_Address = addr;
 
-
   //Check if bin_file is larger than the EPROM
   if (chipType == "27C128") {
     if ( (Start_Address + arraySize) > 16384) {
@@ -378,7 +366,6 @@ void Write() {
 
     //Write
     write_start();
-
 
     for (int x = 0; x < BUFFERSIZE; ++x)  {
 #ifdef DEBUG
@@ -429,7 +416,6 @@ void Erase() {
 
   Serial.println("Erase complete. Run a blank check");
 }
-
 
 //###############################################################
 // COMMANDS SUBS functions
@@ -500,8 +486,6 @@ void write_start() {
 void write_end() {
   set_vpp(LOW);
   data_bus_input();
-
-
 
 }
 
@@ -725,7 +709,6 @@ inline void set_ce (byte state)
   digitalWrite(CE, state);
 }
 
-
 //**attention, this line is LOW - active**
 inline void set_we (byte state)
 {
@@ -937,7 +920,6 @@ void getBlockSize() {
 
 }
 
-
 void resetVariables() {
   mode = "";
   chipType = "";
@@ -950,11 +932,8 @@ long StrToHex(char str[])
   return (long) strtol(str, 0, 16);
 }
 
-
 void Error() {
   Serial.println("Error. Bin file  is too big");
   Serial.print("bin_file: "); Serial.println(arraySize);
-
-
   while (1);
 }
