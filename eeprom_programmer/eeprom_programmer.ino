@@ -13,7 +13,7 @@
    27C128 - not tested
    27C512 - not tested
 
-
+p
    Data write to the EPROM is contained in the bin_file.h which is generated from a convert.py python file
 
    For more information see https://blog.gjmccarthy.co.uk
